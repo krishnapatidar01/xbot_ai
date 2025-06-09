@@ -9,18 +9,13 @@ export default function History() {
     const [chats, setChats] = useState([])
     const [filteredChats, setFilteredChats] = useState([])
 
-   useEffect(() => {
-    const localChats = localStorage.getItem('chat')
-    if (localChats) {
-        try {
-            const parsedChats = JSON.parse(localChats)
-            setChats(parsedChats)
-            setFilteredChats(parsedChats)
-        } catch (e) {
-            console.error("Failed to parse chat from localStorage", e)
+    useEffect(() => {
+        const localChats = localStorage.getItem('chat') || []
+        if (localChats.length > 0) {
+            setChats(JSON.parse(localChats))
+            setFilteredChats(JSON.parse(localChats))
         }
-    }
-}, [])
+    }, [])
 
     return (
         <Box
