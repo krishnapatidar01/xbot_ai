@@ -20,7 +20,7 @@ export default function Home() {
 
   // Save chat to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('chat', JSON.stringify(chat));
+    localStorage.setItem("chat", JSON.stringify(setChat));
   }, [chat]);
 
   // GENERATE AI RESPONSE
