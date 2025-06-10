@@ -28,6 +28,9 @@ function App() {
     localStorage.setItem('theme', mode)
 
   }, [mode])
+  useEffect(() => {
+  localStorage.setItem('chat', JSON.stringify(chat));
+}, [chat]);
 
  return (
   <ThemeContext.Provider value={{ mode: mode, setMode: setMode }}>
