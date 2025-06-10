@@ -21,36 +21,34 @@ export default function Home() {
     const { mode } = useContext(ThemeContext)
 
     // GENERATING AI RESPONSE
- const generateResponse = (input) => {
-  const response = data.find(item => input.toLowerCase() === item.question.toLowerCase());
-  let answer = "Sorry, Did not understand your query!";
+    const generateResponse = (input) => {
 
-  if (response !== undefined) {
-    answer = response.response;
-  }
+        const response = data.find(item => input.toLowerCase() == item.question.toLowerCase())
 
-  const newChat = [
-    {
-      type: 'Human',
-      text: input,
-      time: new Date(),
-      id: chatId
-    },
-    {
-      type: 'AI',
-      text: answer,
-      time: new Date(),
-      id: chatId + 1
+        let answer = "Sorry, Did not understand your query!"
+
+        if (response != undefined) {
+            answer = response.response
+        }
+
+        setChat(prev => ([...prev,
+        {
+            type: 'Human',
+            text: input,
+            time: new Date(),
+            id: chatId
+        },
+        {
+            type: 'AI',
+            text: answer,
+            time: new Date(),
+            id: chatId + 1
+        }
+        ]))
+
+        setChatId(prev => prev + 2)
+
     }
-  ];
-
-  const updatedChat = [...chat, ...newChat];
-
-  setChat(updatedChat);
-  localStorage.setItem("chat", JSON.stringify(updatedChat)); // ✅ Persist to localStorage
-  setChatId(prev => prev + 2);
-};
-
 
     //AUTOSCROLL TO LAST ELEMENT
     useEffect(() => {
