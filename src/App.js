@@ -11,8 +11,13 @@ import { Grid } from '@mui/material'
 function App() {
 
   const [mode, setMode] = useState(localStorage.getItem('theme') || 'light')
-  const [chat, setChat] = useState([])
   const [menuOpen, setMenuOpen] = useState(false)
+  
+  const [chat, setChat] = useState(() => {
+  const savedChat = localStorage.getItem('chat');
+  return savedChat ? JSON.parse(savedChat) : [];
+});
+
 
   //create theme
   const theme = React.useMemo(() => createTheme(getThemePallete(mode)), [mode]);
