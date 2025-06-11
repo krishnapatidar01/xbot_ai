@@ -10,14 +10,12 @@ export default function History() {
     const [filteredChats, setFilteredChats] = useState([])
 
     useEffect(() => {
-  const localChats = localStorage.getItem('chat');
-  if (localChats) {
-    const parsedChats = JSON.parse(localChats);
-    setChats(parsedChats);
-    setFilteredChats(parsedChats);
-  }
-}, []);
-
+        const localChats = localStorage.getItem('chat') || []
+        if (localChats.length > 0) {
+            setChats(JSON.parse(localChats))
+            setFilteredChats(JSON.parse(localChats))
+        }
+    }, [])
 
     return (
         <Box
