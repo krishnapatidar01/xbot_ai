@@ -56,16 +56,16 @@ export default function Home() {
     }, [scrollToBottom])
 
     return (
-       <Stack
-  minHeight="100vh" 
-  justifyContent="space-between"
-  sx={{
-    overflow: 'visible', 
-    '@media (max-width:767px)': {
-      background: mode === 'light' ? 'linear-gradient(#F9FAFA 60%, #EDE4FF)' : ''
-    }
-  }}
->
+        <Stack
+            height={'100vh'}
+            justifyContent={'space-between'}
+            sx={{
+                '@media (max-width:767px)': {
+                    background: mode == 'light' ? 'linear-gradient(#F9FAFA 60%, #EDE4FF)' : ''
+                }
+            }}
+        >
+
             <Navbar />
 
             {chat.length == 0 && <InitialChat generateResponse={generateResponse} />}

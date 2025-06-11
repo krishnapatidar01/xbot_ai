@@ -24,7 +24,7 @@ function App() {
 
   }, [mode])
 
- return (
+  return (
   <ThemeContext.Provider value={{ mode: mode, setMode: setMode }}>
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -59,7 +59,6 @@ function App() {
     </ThemeProvider>
   </ThemeContext.Provider>
 );
-
 }
 
 export default App;
