@@ -67,18 +67,6 @@ export default function Home() {
         >
 
             <Navbar />
-             <Typography
-                variant="h1"
-                sx={{
-                    fontSize: '2rem',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    mt: 2,
-                    color: mode === 'light' ? '#000' : '#fff'
-                }}
-            >
-                Bot AI
-            </Typography>
 
             {chat.length == 0 && <InitialChat generateResponse={generateResponse} />}
 
