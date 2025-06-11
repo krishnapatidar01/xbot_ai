@@ -19,9 +19,10 @@ export default function Home() {
   const { mode } = useContext(ThemeContext);
 
   // Save chat to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem("chat", JSON.stringify(setChat));
-  }, [chat]);
+useEffect(() => {
+  localStorage.setItem("chat", JSON.stringify(chat));
+}, [chat]);
+
 
   // GENERATE AI RESPONSE
   const generateResponse = (input) => {
