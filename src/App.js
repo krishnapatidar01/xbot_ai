@@ -25,40 +25,37 @@ function App() {
   }, [mode])
 
   return (
-  <ThemeContext.Provider value={{ mode: mode, setMode: setMode }}>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <ThemeContext.Provider value={{ mode: mode, setMode: setMode }}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
 
-      <div style={{ display: 'flex', minHeight: '100vh' }}>
-        {/* Sidebar */}
-        <div
-  style={{
-    width: '250px',
-    backgroundColor: theme.palette.primary.light,
-    transition: 'transform 0.4s ease',
-    transform:
-      window.innerWidth < 800
-        ? menuOpen
-          ? 'translateX(0)'
-          : 'translateX(-100%)'
-        : 'translateX(0)',
-    position: window.innerWidth < 800 ? 'fixed' : 'relative',
-    zIndex: window.innerWidth < 800 ? 9999 : 1,
-    height: '100vh',
-  }}
->
+        <Grid container sx={{ background: 'linear-gradient(rgba(215, 199, 244, 0.2), rgba(151, 133, 186, 0.2))' }} >
+          <Grid
+            item xs={12}
+            md={2.5}
+            sx={{
+              bgcolor: 'primary.light',
+              '@media (max-width:800px)': {
+                width: '70%',
+                transform: menuOpen ? 'translateX(0)' : 'translateX(-100%)',
+                transition: 'transform 400ms ease',
+              },
+            }}
+            position={{ xs: 'fixed', md: 'relative' }}
+            height={'100vh'}
+            zIndex={{ xs: 9999, md: 1 }}
+            boxShadow={{ xs: menuOpen ? 10 : 0, md: 0 }}
+          >
+            <Sidebar setChat={setChat} closeMenu={() => setMenuOpen(false)} />
+          </Grid>
+          <Grid item xs={12} md={9.5}>
+            <Outlet context={{ chat: chat, setChat: setChat, handleMobileMenu: setMenuOpen }} />
+          </Grid>
+        </Grid>
 
-          <Sidebar setChat={setChat} closeMenu={() => setMenuOpen(false)} />
-        </div>
-
-        {/* Main content */}
-        <div style={{ flexGrow: 1, padding: '1rem' }}>
-          <Outlet context={{ chat: chat, setChat: setChat, handleMobileMenu: setMenuOpen }} />
-        </div>
-      </div>
-    </ThemeProvider>
-  </ThemeContext.Provider>
-);
+      </ThemeProvider>
+    </ThemeContext.Provider>
+  );
 }
 
 export default App;
