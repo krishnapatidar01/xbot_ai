@@ -1,107 +1,47 @@
-import { Box, Stack, Typography } from '@mui/material';
-import InitialChat from '../../components/InitialChat/InitialChat';
-import ChatInput from '../../components/ChatInput/ChatInput';
-import ChattingCard from '../../components/ChattingCard/ChattingCard';
-import FeedbackModal from '../../components/FeedbackModal/FeedbackModal';
-import { useEffect, useRef, useState, useContext } from 'react';
-import data from '../../aiData/sampleData.json';
+import { Stack } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import Navbar from '../../components/Navbar/Navbar';
-import { ThemeContext } from '../../theme/ThemeContext';
+import ChattingCard from '../components/ChattingCard/ChattingCard';
+import InitialChat from '../components/InitialChat/InitialChat';
+import ChatInput from '../components/ChatInput/ChatInput';
 
-export default function Home() {
-  const [showModal, setShowModal] = useState(false);
-  const listRef = useRef(null);
-  const [chatId, setChatId] = useState(1);
-  const [selectedChatId, setSelectedChatId] = useState(null);
-  const [scrollToBottom, setScrollToBottom] = useState(false);
+const Home = () => {
   const { chat, setChat } = useOutletContext();
-  const { mode } = useContext(ThemeContext);
+  const [selectedChatId, setSelectedChatId] = useState(null);
+  const listRef = useRef(null);
+  const [showModal, setShowModal] = useState(false);
 
-  // Save chat to localStorage whenever it changes
-useEffect(() => {
-  localStorage.setItem("chat", JSON.stringify(chat));
-}, [chat]);
-
-
-  // GENERATE AI RESPONSE
-  const generateResponse = (input) => {
-    const response = data.find(
-      (item) => input.toLowerCase() === item.question.toLowerCase()
-    );
-
-    let answer = 'Sorry, Did not understand your query!';
-
-    if (response !== undefined) {
-      answer = response.response;
-    }
-
-    setChat((prev) => [
-      ...prev,
-      {
-        type: 'Human',
-        text: input,
-        time: new Date(),
-        id: chatId,
-      },
-      {
-        type: 'AI',
-        text: answer,
-        time: new Date(),
-        id: chatId + 1,
-      },
-    ]);
-
-    setChatId((prev) => prev + 2);
+  const generateResponse = (question) => {
+    // your AI static response logic
   };
 
-  // AUTOSCROLL TO LAST ELEMENT
-  useEffect(() => {
-    listRef.current?.lastElementChild?.scrollIntoView();
-  }, [scrollToBottom]);
-
   return (
-    <Stack
-      height="100vh"
-      justifyContent="space-between"
-      sx={{
-        '@media (max-width:767px)': {
-          background:
-            mode === 'light'
-              ? 'linear-gradient(#F9FAFA 60%, #EDE4FF)'
-              : '',
-        },
-      }}
-    >
-      <Navbar />
-
-      {chat.length === 0 && (
-        <InitialChat generateResponse={generateResponse} />
-      )}
-
-      {chat.length > 0 && (
-        <Stack
-          height={1}
-          flexGrow={0}
-          p={{ xs: 2, md: 3 }}
-          spacing={{ xs: 2, md: 3 }}
-          sx={{
-            overflowY: 'auto',
-            '&::-webkit-scrollbar': {
-              width: '10px',
-            },
-            '&::-webkit-scrollbar-track': {
-              boxShadow: 'inset 0 0 8px rgba(0,0,0,0.1)',
-              borderRadius: '8px',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: 'rgba(151, 133, 186,0.4)',
-              borderRadius: '8px',
-            },
-          }}
-          ref={listRef}
-        >
-          {chat.map((item, index) => (
+    <Stack sx={{ height: '100vh' }}>
+      <Stack
+        height={1}
+        flexGrow={0}
+        p={{ xs: 2, md: 3 }}
+        spacing={{ xs: 2, md: 3 }}
+        sx={{
+          overflowY: 'auto',
+          '&::-webkit-scrollbar': {
+            width: '10px',
+          },
+          '&::-webkit-scrollbar-track': {
+            boxShadow: 'inset 0 0 8px rgba(0,0,0,0.1)',
+            borderRadius: '8px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'rgba(151, 133, 186,0.4)',
+            borderRadius: '8px',
+          },
+        }}
+        ref={listRef}
+      >
+        {chat.length === 0 ? (
+          <InitialChat generateResponse={generateResponse} />
+        ) : (
+          chat.map((item, index) => (
             <ChattingCard
               details={item}
               key={index}
@@ -109,26 +49,29 @@ useEffect(() => {
               setSelectedChatId={setSelectedChatId}
               showFeedbackModal={() => setShowModal(true)}
             />
-          ))}
-        </Stack>
-      )}
-
+          ))
+        )}
+      </Stack>
       <ChatInput
-        generateResponse={generateResponse}
-        setScroll={setScrollToBottom}
-        chat={chat}
+        setChat={setChat}
         clearChat={() => {
+          const existingChats = JSON.parse(localStorage.getItem("allChats")) || [];
+          if (chat.length > 0) {
+            const newChat = {
+              datetime: new Date().toISOString(),
+              chat: chat,
+            };
+            existingChats.push(newChat);
+            localStorage.setItem("allChats", JSON.stringify(existingChats));
+          }
           setChat([]);
-          localStorage.removeItem('chat');
+          localStorage.removeItem("chat");
         }}
-      />
-
-      <FeedbackModal
-        open={showModal}
-        updateChat={setChat}
-        chatId={selectedChatId}
-        handleClose={() => setShowModal(false)}
+        generateResponse={generateResponse}
+        chat={chat}
       />
     </Stack>
   );
-}
+};
+
+export default Home;
